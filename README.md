@@ -83,3 +83,9 @@ The default application size is 1400x750 to accomodate smaller displays. Since a
 ## Output
 
 Each time you complete a dataset, you will get a `.tsv` and a `.json` file named after the trial zip file you have loaded. These files contain the results of your validation and will need to be stored somewhere safe.
+
+## Limitations
+
+* You must launch the gui application from it's root directory. Using an absolute or relative path that launches the application from another working directory will cause the application to not be able to locate important supporting files.
+
+* The `.tsv` and `.json` files produced during the validation are saved to the same directory where you loaded the trial data zip file and cannot be changed at this time through the interface.
