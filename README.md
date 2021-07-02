@@ -74,6 +74,10 @@ Each of these positions are represented by the color to the immediate right of t
 
 * 4, 5 = Toggle show lines and show numbers checkboxes respectively
 
+* Mousewheel = Scroll the canvas vertically if necessary
+
+* `shift` + Mousewheel = Scroll the canvas horizontally if necessary
+
 ## Setup
 
 Once you have cloned the eye-validate repository to your computer, you will need to make sure that you have Python 3 installed on your system. Eye-validate also requires a few third party python libraries that can be installed using `pip install -r requirements.txt`. The libraries can be install in a virtual environment or globally. Once you have the prerequisites met, simply run `python eye_validate_gui.py` to launch the interface and begin dataset validation. 
