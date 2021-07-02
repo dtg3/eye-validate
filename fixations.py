@@ -5,7 +5,6 @@ import json
 import math
 import statistics
 from pathlib import Path
-from datetime import datetime
 from enum import Enum
 from datetime import datetime
 
@@ -382,7 +381,7 @@ class Trial:
     def write_out_fixations(self, output_directory, file_mod=None):
         filename = get_emip_base_filename(self.raw_gaze_data_file)
         if file_mod:
-            filename +=  '_fixations_' + file_mod + '_' + str(datetime.now().timestamp()) + '.tsv'
+            filename +=  '_fixations_' + file_mod + '.tsv'
         else:
             filename +=  '_fixations.tsv'
             
@@ -414,7 +413,7 @@ class Trial:
     def create_json_dump(self, output_directory, file_mod=None):
         filename = get_emip_base_filename(self.raw_gaze_data_file)
         if file_mod:
-            filename +='_trial_data_' + file_mod + '_' + str(datetime.now().timestamp()) + '.json'
+            filename +='_trial_data_' + file_mod + '.json'
         else:
             filename +='_trial_data.json'
 

@@ -7,6 +7,7 @@ import utils
 import os
 import ntpath
 from zipfile import ZipFile
+from datetime import datetime
 import io
 
 def from_rgb(rgb):
@@ -133,14 +134,17 @@ class ExampleApp(Frame):
         self.start_y = 0
 
     def finish(self):
+
+        filename_attribute =  '_VALIDATION_' + str(int(datetime.now().timestamp())) 
+
         token_stuff = TokenMapper(self.trial.mapping_data_file, self.get_text_content_from_support_zip(self.trial.mapping_data_file))
 
         for fix in self.trial.fixations:
             token_data = token_stuff.find_mapping(fix.calculated_adjusted_x(), fix.calculated_adjusted_y())
             fix.update_token_info(token_data)
 
-        self.trial.create_json_dump(os.path.dirname(self.json_file.name), 'VALIDATION')
-        self.trial.write_out_fixations(os.path.dirname(self.json_file.name), 'VALIDATION')
+        self.trial.create_json_dump(os.path.dirname(self.json_file.name), filename_attribute)
+        self.trial.write_out_fixations(os.path.dirname(self.json_file.name), filename_attribute)
         self.canvas.delete(self.canvas_img)
         self.set_up()
 

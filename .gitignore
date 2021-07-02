@@ -2,6 +2,7 @@
 .vscode
 .DS_Store
 .jpg
+temp_fix_image.jpg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
