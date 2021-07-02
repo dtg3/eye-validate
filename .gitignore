@@ -1,7 +1,7 @@
 # Misc Files to Ignore
 .vscode
 .DS_Store
-*.jpg
+.jpg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
