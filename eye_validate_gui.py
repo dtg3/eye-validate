@@ -24,8 +24,8 @@ class ExampleApp(Frame):
         self.trial = None
         self.trial_adj = None
         self.trial_nearest = None
-        #self.canvas = Canvas(self, width=1600, height=900, cursor="cross")
-        self.canvas = Canvas(self, width=1400, height=750, cursor="cross")
+        self.canvas_width, self.canvas_height = self.get_app_dimensions()
+        self.canvas = Canvas(self, width=self.canvas_width, height=self.canvas_height, cursor="cross")
         self.canvas.bind('d', self.next_fixation)
         self.canvas.bind('a', self.prev_fixation)
         self.canvas.bind('r', self.reset_fixation)
@@ -108,7 +108,7 @@ class ExampleApp(Frame):
         self.trial_num = 1
 
         self.support_zip = os.path.join(os.path.dirname(__file__), 'support_files.zip')
-        
+
     def on_button_press(self, event):
         if not self.tk_img:
             return
@@ -262,6 +262,21 @@ class ExampleApp(Frame):
         
         return text_data
         
+    def get_app_dimensions(self):
+        width = 1400
+        height = 750
+        try:
+            with open('settings.txt', 'r') as settings_file:
+                for line in settings_file:
+                    if 'WIDTH' in line:
+                        width = int(line.split('=')[1])
+                    if 'HEIGHT' in line:
+                        height = int(line.split('=')[1])
+        except Exception as error:
+            print("WARNING: Could not locate settings.txt in application directory")
+        finally:
+            return (width, height)
+
 if __name__ == "__main__":
     root=Tk()
     app = ExampleApp(root)
