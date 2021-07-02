@@ -8,7 +8,7 @@ When performing an eye tracking study, many imperfections with the technology an
 
 The image below is a screenshot representing eye tracking data in the eye-validate gui application.
 
-![](/Users/dguarnera/Repos/dissertation_work/eye-validate/screenshots/labeled_symbols.jpg)
+![](docs/screenshots/labeled_symbols.jpg)
 
 The light red collection of dots ( looks like a red smear) indicates the locations of all the the raw gaze samples that were used by a fixation detection algorithm to position a fixation on the stimulus. Each of the solid dots outlined in black are fixations. The lines between each fixation are saccades or eye movment transitioning from one fixation to another. The green fixation dot is the current data point that needs to be examined for positioning on the stimulus. The other red and blue dots are also fixations, but they respectively represent the previous and subsequent fixations relative to the current fixation data point (green dot) and are numbered accordingly (`-` for previous and `+` for subsequent). The red, blue, and green saccade lines are color coded to the fixations and show the general movement trend of the participant's fixations.
 
@@ -18,23 +18,23 @@ Determining the "correct" location of a fixation relies on observing of the loca
 
 Consider the image below to help illustrate correcting fixation locations.
 
-![](/Users/dguarnera/Repos/dissertation_work/eye-validate/screenshots/bad_simple_example.png)
+![](docs/screenshots/bad_simple_example.png)
 
 In this image, the current fixation under consideration (green dot) has fallen on blank whitespace. While this location is precisely located at the center of the raw gazes (light red dots), remember that a fixation is an area that a participant has spent time observing steadily. Given this, it is unlikely that the participant was staring in the empty space. We could consider the nearest textual token to the fixation such as in the image below.
 
-![](/Users/dguarnera/Repos/dissertation_work/eye-validate/screenshots/bad_nearest_simple_example.png)
+![](docs/screenshots/bad_nearest_simple_example.png)
 
 This location is better as we are now positioned within the Rectangle constructor in the stimulus content, but once again, it is unlikely that the participant was staring at the whitespace between two tokens. From observing the previous (red) and subsequent (blue) fixations it appears that the previous fixations that the user was scanning the Rectangle constructor line above them and the subsequent fixations trend toward left and downward in the stimulus. Considering these movement trends, it is likely that the current fixation (green dot) belongs on the line with the Rectangle constructor, but needs could be shifted to the left to follow the subsequent (blue) fixation movement trend. Also from observing the raw gazes we can see that the trend smudes down and to the left much like the fixation movement for the subsequent points.
 
 The image below represents the new positioning based on the aforementioned factors.
 
-![](/Users/dguarnera/Repos/dissertation_work/eye-validate/screenshots/corrected_simple_example.png)
+![](docs/screenshots/corrected_simple_example.png)
 
 ## Interface Usage
 
 The image below represents the graphical interface of the eye-validate application.
 
-<img src="file:///Users/dguarnera/Repos/dissertation_work/eye-validate/screenshots/interface.png" title="" alt="" width="758">
+![](docs/screenshots/interface.png)
 
 In addition to representing eye tracking data as described in "Data Representation", the interface allows for additional interactions and data presentation options. Once a zip file containing eye tracking trial data is opened, the interface will display the stimulus and the first set of data in the trial. The previous and next fixation buttons allow for iterating through the dataset and presenting the assciated fixation information. If a current fixation (green dot) does not appear in a location that seems reasonable, clicking on any location in the image stimulus will move the data point to that location and save the changed position data. Sometimes is it helpful to see other possible fixation positions. The checkboxes along the top can supplement the visualization by showing the:
 
