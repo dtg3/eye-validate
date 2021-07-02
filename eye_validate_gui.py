@@ -35,6 +35,7 @@ class ExampleApp(Frame):
         self.canvas.bind('3', self.toggle_original)
         self.canvas.bind('4', self.toggle_lines)
         self.canvas.bind('5', self.toggle_numbers)
+        self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
 
         self.frame1 = Frame(self)
         self.frame2 = Frame(self)
@@ -212,17 +213,26 @@ class ExampleApp(Frame):
         if key_bind:
             self.chk_show_lines.toggle()
         
+        if not self.tk_img:
+            return
+        
         self.reload_image()
     
     def toggle_numbers(self, key_bind=None):
         if key_bind:
             self.chk_show_numbers.toggle()
         
+        if not self.tk_img:
+            return
+
         self.reload_image()
     
     def toggle_original(self, key_bind=None):
         if key_bind:
             self.chk_show_original.toggle()
+        
+        if not self.tk_img:
+            return
         
         self.reload_image()
 
@@ -230,12 +240,18 @@ class ExampleApp(Frame):
         if key_bind:
             self.chk_show_adjusted.toggle()
         
+        if not self.tk_img:
+            return
+
         self.reload_image()
     
     def toggle_nearest(self, key_bind=None):
         if key_bind:
             self.chk_show_nearest.toggle()
         
+        if not self.tk_img:
+            return
+
         self.reload_image()
     
     def get_image_content_from_support_zip(self, path):
@@ -261,7 +277,15 @@ class ExampleApp(Frame):
                 text_data = text.read().splitlines()
         
         return text_data
-        
+
+    def on_mousewheel(self, event):
+        shift = (event.state & 0x1) != 0
+        scroll = -1 if event.delta > 0 else 1
+        if shift:
+            self.canvas.xview_scroll(scroll, "units")
+        else:
+            self.canvas.yview_scroll(scroll, "units")
+
     def get_app_dimensions(self):
         width = 1400
         height = 750
