@@ -76,7 +76,9 @@ Each of these positions are represented by the color to the immediate right of t
 
 ## Setup
 
-Once you have cloned the eye-validate repository to your computer, you will need to make sure that you have Python 3 installed on your system. Eye-validate also requires a few third party python libraries that can be installed using `pip install -r requirements.txt`. The libraries can be install in a virtual environment or globally. Once you have the prerequisites met, simply run `python eye_validate_gui.py` to launch the interface and begin dataset validation.
+Once you have cloned the eye-validate repository to your computer, you will need to make sure that you have Python 3 installed on your system. Eye-validate also requires a few third party python libraries that can be installed using `pip install -r requirements.txt`. The libraries can be install in a virtual environment or globally. Once you have the prerequisites met, simply run `python eye_validate_gui.py` to launch the interface and begin dataset validation. 
+
+The default application size is 1400x750 to accomodate smaller displays. Since all stimulus images are 1920x1080, this will require using the scrollbars from time to time. If you have a higher resolution display, you can edit the `settings.txt` file to manually change the display dimentions of the application and eliminate the need to scroll.
 
 ## Output
 
