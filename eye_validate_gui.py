@@ -60,6 +60,9 @@ class ExampleApp(Frame):
         self.lbl_nearest = Label(self.frame1, text="  ", bg=from_rgb((0, 212, 255)))
         self.lbl_adjusted = Label(self.frame1, text="  ", bg=from_rgb((0, 127, 255)))
 
+        self.fix_count_status = StringVar()
+        self.lbl_fixation_count_status = Label(self.frame2, textvariable = self.fix_count_status)
+
         self.lbl_instructions = Label(self.frame2, 
                                       text="Click on the image to reposition the green fixation if it appears out of place.",
                                       font=("Arial", 20))
@@ -94,9 +97,10 @@ class ExampleApp(Frame):
         self.sbarv.grid(row=1,column=1,stick=N+S)
         self.sbarh.grid(row=2,column=0,sticky=E+W)
         
-        self.prev_fix_btn.grid(row=0, column=0, padx=(0,100), sticky=W)
-        self.next_fix_btn.grid(row=0, column=1, padx=(0,100), sticky=W)
-        self.lbl_instructions.grid(row=0, column=2, sticky=W)
+        self.prev_fix_btn.grid(row=0, column=0, padx=(0,50), sticky=W)
+        self.lbl_fixation_count_status.grid(row=0, column=1, padx=(0, 50), sticky=W)
+        self.next_fix_btn.grid(row=0, column=2, padx=(0,100), sticky=W)
+        self.lbl_instructions.grid(row=0, column=3, sticky=W)
         
         self.canvas.bind("<ButtonPress-1>", self.on_button_press)
         self.canvas.bind("<ButtonRelease-1>", self.on_button_release)
@@ -108,6 +112,7 @@ class ExampleApp(Frame):
         self.tk_img = None
         self.trial = None
         self.trial_num = 1
+        self.update_fixation_count_label()
 
         self.support_zip = os.path.join(os.path.dirname(__file__), 'support_files.zip')
 
@@ -132,6 +137,8 @@ class ExampleApp(Frame):
         self.trial_num = 1
         self.start_x = 0
         self.start_y = 0
+
+        self.update_fixation_count_label()
 
     def finish(self):
 
@@ -174,6 +181,8 @@ class ExampleApp(Frame):
 
             self.trial_num = 1
             self.reload_image()
+        
+        self.update_fixation_count_label()
     
     def reload_image(self):
         utils.plot_fixations_for_verification(self.get_image_content_from_support_zip(self.trial.stimulus_image), self.trial.fixations[:(self.trial_num + 2)], self.trial_adj.fixations[:(self.trial_num + 2)], self.trial_nearest.fixations[:(self.trial_num + 2)], self.trial_num - 1, self.check_states, 'temp_fix_image.jpg')
@@ -190,7 +199,9 @@ class ExampleApp(Frame):
         else:
             self.reload_image()
             self.x = 0
-            self.y = 0         
+            self.y = 0
+
+        self.update_fixation_count_label()         
 
     def prev_fixation(self, key_bind=None):
         if not self.tk_img:
@@ -200,7 +211,15 @@ class ExampleApp(Frame):
             self.start_x = 0
             self.start_y = 0
             self.reload_image()
-    
+        
+        self.update_fixation_count_label()
+
+    def update_fixation_count_label(self):
+        if self.trial:
+            self.fix_count_status.set("{} / {}".format(self.trial_num, len(self.trial.fixations)))
+        else:
+            self.fix_count_status.set(" ")
+
     def reset_fixation(self, key_bind=None):
         if not self.tk_img:
             return

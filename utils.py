@@ -81,8 +81,8 @@ def plot_fixations_for_verification(image_path, fixations, adjusted_fixations, n
         if fix_prev1 and fix_current_nearest:
             img2 = cv2.line(img2, (fix_prev1.fixation_x, fix_prev1.fixation_y), (fix_current_nearest.calculated_adjusted_x(), fix_current_nearest.calculated_adjusted_y()), NEAREST_COLOR, 2)
 
-        if fix_prev1 and fix_current_adjusted:
-            img2 = cv2.line(img2, (fix_prev1.fixation_x, fix_prev1.fixation_y), (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), ADJUSTED_COLOR, 2)
+        # if fix_prev1 and fix_current_adjusted:
+        #     img2 = cv2.line(img2, (fix_prev1.fixation_x, fix_prev1.fixation_y), (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), ADJUSTED_COLOR, 2)
         
         if fix_prev1 and fix_current:
             img2 = cv2.line(img2, (fix_prev1.fixation_x, fix_prev1.fixation_y), (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), CURRENT_COLOR, 2)
@@ -93,14 +93,20 @@ def plot_fixations_for_verification(image_path, fixations, adjusted_fixations, n
         if fix_current_nearest and fix_next1:
             img2 = cv2.line(img2, (fix_current_nearest.calculated_adjusted_x(), fix_current_nearest.calculated_adjusted_y()), (fix_next1.fixation_x, fix_next1.fixation_y), NEAREST_COLOR, 2)    
 
-        if fix_current_adjusted and fix_next1:
-            img2 = cv2.line(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), (fix_next1.fixation_x, fix_next1.fixation_y), ADJUSTED_COLOR, 2)
+        # if fix_current_adjusted and fix_next1:
+        #     img2 = cv2.line(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), (fix_next1.fixation_x, fix_next1.fixation_y), ADJUSTED_COLOR, 2)
 
         if fix_current and fix_next1:
             img2 = cv2.line(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), (fix_next1.fixation_x, fix_next1.fixation_y), CURRENT_COLOR, 2)
         
         if fix_next1 and fix_next2:
             img2 = cv2.line(img2, (fix_next1.fixation_x, fix_next1.fixation_y), (fix_next2.fixation_x, fix_next2.fixation_y), NEXT_COLOR, 2)
+        
+        if fix_prev1 and fix_current_adjusted:
+            img2 = cv2.line(img2, (fix_prev1.fixation_x, fix_prev1.fixation_y), (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), ADJUSTED_COLOR, 2)
+        
+        if fix_current_adjusted and fix_next1:
+            img2 = cv2.line(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), (fix_next1.fixation_x, fix_next1.fixation_y), ADJUSTED_COLOR, 2)
 
     # DOTS
     if fix_prev2:
@@ -119,9 +125,9 @@ def plot_fixations_for_verification(image_path, fixations, adjusted_fixations, n
     if fix_current_nearest:
         img2 = cv2.circle(img2, (fix_current_nearest.calculated_adjusted_x(), fix_current_nearest.calculated_adjusted_y()), radius, NEAREST_COLOR, -1)
         img2 = cv2.circle(img2, (fix_current_nearest.calculated_adjusted_x(), fix_current_nearest.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
-    if fix_current_adjusted:
-        img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, ADJUSTED_COLOR, -1)
-        img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
+    # if fix_current_adjusted:
+    #     img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, ADJUSTED_COLOR, -1)
+    #     img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
     if fix_current:
         img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius, CURRENT_COLOR, -1)
         img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
@@ -135,6 +141,9 @@ def plot_fixations_for_verification(image_path, fixations, adjusted_fixations, n
         img2 = cv2.circle(img2, (fix_next2.fixation_x, fix_next2.fixation_y), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
         if output_modes[4].get():
             img2 = cv2.putText(img2, "+2", (fix_next2.fixation_x, fix_next2.fixation_y), cv2.FONT_HERSHEY_COMPLEX_SMALL, .75, (0, 0, 0), 1)
+    if fix_current_adjusted:
+        img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, ADJUSTED_COLOR, -1)
+        img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
 
     cv2.imwrite(output_file, img2)
 
