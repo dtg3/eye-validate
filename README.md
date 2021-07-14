@@ -80,7 +80,7 @@ Each of these positions are represented by the color to the immediate right of t
 
 ## Setup
 
-Once you have cloned the eye-validate repository to your computer, you will need to make sure that you have Python 3 installed on your system. Eye-validate also requires a few third party python libraries that can be installed using `pip install -r requirements.txt`. The libraries can be install in a virtual environment or globally. Once you have the prerequisites met, simply run `python eye_validate_gui.py` to launch the interface and begin dataset validation. 
+Once you have cloned the eye-validate repository to your computer, you will need to make sure that you have Python 3 installed on your system. Eye-validate also requires a few third party python libraries that can be installed using `pip install -r requirements.txt`. The libraries can be install in a [virtual environment](https://docs.python.org/3/tutorial/venv.html) or globally. Once you have the prerequisites met, simply run `python eye_validate_gui.py` from the project directory cloned from GitHub to launch the interface and begin dataset validation. 
 
 The default application size is 1400x750 to accomodate smaller displays. Since all stimulus images are 1920x1080, this will require using the scrollbars from time to time. If you have a higher resolution display, you can edit the `settings.txt` file to manually change the display dimentions of the application and eliminate the need to scroll.
 
@@ -90,6 +90,12 @@ Each time you complete a dataset, you will get a `.tsv` and a `.json` file named
 
 ## Limitations
 
-* You must launch the gui application from it's root directory. Using an absolute or relative path that launches the application from another working directory will cause the application to not be able to locate important supporting files.
+* You **must** launch the gui application from it's root directory. Using an absolute or relative path that launches the application from another working directory will cause the application to not be able to locate important supporting files.
 
 * The `.tsv` and `.json` files produced during the validation are saved to the same directory where you loaded the trial data zip file and cannot be changed at this time through the interface.
+
+* The adjusted data fixation points (green dots) and the saccade lines that connect to it (green lines) are drawn on top of all other lines and dots to increase visibility. It is possible that these data points may obscure other visualized data.
+
+* Previous data fixations (dark red dots) **always show the original location determined by the fixation detection algorithm**. This is by design to avoid introducing excessive skewing/bias to the fixation correction process.
+
+* When you correct a green fixation location, that new location is recorded on mouse click and saved automatically in an output file once the next fixation button (or the `d` key) is pressed after viewing the last fixation in the trial and the stimulus image disappears.
