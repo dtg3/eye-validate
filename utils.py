@@ -119,18 +119,6 @@ def plot_fixations_for_verification(image_path, fixations, adjusted_fixations, n
         img2 = cv2.circle(img2, (fix_prev1.fixation_x, fix_prev1.fixation_y), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
         if output_modes[4].get():
             img2 = cv2.putText(img2, "-1", (fix_prev1.fixation_x, fix_prev1.fixation_y), cv2.FONT_HERSHEY_COMPLEX_SMALL, .75, (0, 0, 0), 1)
-    if fix_current_original:
-        img2 = cv2.circle(img2, (fix_current_original.fixation_x, fix_current_original.fixation_y), radius, ORIGINAL_COLOR, -1)
-        img2 = cv2.circle(img2, (fix_current_original.fixation_x, fix_current_original.fixation_y), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
-    if fix_current_nearest:
-        img2 = cv2.circle(img2, (fix_current_nearest.calculated_adjusted_x(), fix_current_nearest.calculated_adjusted_y()), radius, NEAREST_COLOR, -1)
-        img2 = cv2.circle(img2, (fix_current_nearest.calculated_adjusted_x(), fix_current_nearest.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
-    # if fix_current_adjusted:
-    #     img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, ADJUSTED_COLOR, -1)
-    #     img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
-    if fix_current:
-        img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius, CURRENT_COLOR, -1)
-        img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
     if fix_next1:
         img2 = cv2.circle(img2, (fix_next1.fixation_x, fix_next1.fixation_y), radius, NEXT_COLOR, -1)
         img2 = cv2.circle(img2, (fix_next1.fixation_x, fix_next1.fixation_y), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
@@ -141,9 +129,22 @@ def plot_fixations_for_verification(image_path, fixations, adjusted_fixations, n
         img2 = cv2.circle(img2, (fix_next2.fixation_x, fix_next2.fixation_y), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
         if output_modes[4].get():
             img2 = cv2.putText(img2, "+2", (fix_next2.fixation_x, fix_next2.fixation_y), cv2.FONT_HERSHEY_COMPLEX_SMALL, .75, (0, 0, 0), 1)
+    
+    if fix_current_original:
+        img2 = cv2.circle(img2, (fix_current_original.fixation_x, fix_current_original.fixation_y), radius, ORIGINAL_COLOR, -1)
+        img2 = cv2.circle(img2, (fix_current_original.fixation_x, fix_current_original.fixation_y), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
+    
+    if fix_current_nearest:
+        img2 = cv2.circle(img2, (fix_current_nearest.calculated_adjusted_x(), fix_current_nearest.calculated_adjusted_y()), radius, NEAREST_COLOR, -1)
+        img2 = cv2.circle(img2, (fix_current_nearest.calculated_adjusted_x(), fix_current_nearest.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
+    
     if fix_current_adjusted:
         img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, ADJUSTED_COLOR, -1)
         img2 = cv2.circle(img2, (fix_current_adjusted.calculated_adjusted_x(), fix_current_adjusted.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
+    
+    if fix_current:
+        img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius, CURRENT_COLOR, -1)
+        img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
 
     cv2.imwrite(output_file, img2)
 
