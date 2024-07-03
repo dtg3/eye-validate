@@ -23,7 +23,7 @@ class ExampleApp(Frame):
         Frame.__init__(self,master=None)
         self.master = master
         self.trial = None
-        self.trial_adj = None
+        #self.trial_adj = None
         self.trial_nearest = None
         self.canvas_width, self.canvas_height = self.get_app_dimensions()
         self.canvas = Canvas(self, width=self.canvas_width, height=self.canvas_height, cursor="cross")
@@ -31,11 +31,10 @@ class ExampleApp(Frame):
         self.canvas.bind('a', self.prev_fixation)
         self.canvas.bind('r', self.reset_fixation)
         self.canvas.bind('o', self.load_fixation)
-        self.canvas.bind('1', self.toggle_adjusted)
-        self.canvas.bind('2', self.toggle_nearest)
-        self.canvas.bind('3', self.toggle_original)
-        self.canvas.bind('4', self.toggle_lines)
-        self.canvas.bind('5', self.toggle_numbers)
+        self.canvas.bind('1', self.toggle_nearest)
+        self.canvas.bind('2', self.toggle_original)
+        self.canvas.bind('3', self.toggle_lines)
+        self.canvas.bind('4', self.toggle_numbers)
         self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
 
         self.frame1 = Frame(self)
@@ -47,7 +46,6 @@ class ExampleApp(Frame):
         self.reset_fix_btn = Button(self.frame1, text="Reset Fixation", command=self.reset_fixation)
 
         self.check_states = [IntVar(), IntVar(), IntVar(), IntVar(), IntVar()]
-        self.chk_show_adjusted = Checkbutton(self.frame1, text="Show Ajusted", command=self.toggle_adjusted, variable=self.check_states[0])
         self.chk_show_nearest = Checkbutton(self.frame1, text="Show Nearest", command=self.toggle_nearest, variable=self.check_states[1])
         self.chk_show_original = Checkbutton(self.frame1, text="Show Original", command=self.toggle_original, variable=self.check_states[2])
         
@@ -58,7 +56,6 @@ class ExampleApp(Frame):
 
         self.lbl_original = Label(self.frame1, text="  ", bg=from_rgb((255, 0, 170)))
         self.lbl_nearest = Label(self.frame1, text="  ", bg=from_rgb((0, 212, 255)))
-        self.lbl_adjusted = Label(self.frame1, text="  ", bg=from_rgb((0, 127, 255)))
 
         self.fix_count_status = StringVar()
         self.lbl_fixation_count_status = Label(self.frame2, textvariable = self.fix_count_status)
@@ -83,15 +80,13 @@ class ExampleApp(Frame):
         self.open_btn.grid(row=0, column=0, padx=(0,100), sticky=W)
         self.reset_fix_btn.grid(row=0, column=1, padx=(0,100), sticky=E)
         
-        self.chk_show_adjusted.grid(row=0, column=2, sticky=E)
-        self.lbl_adjusted.grid(row=0, column=3, padx=(0,10), sticky=E)
-        self.chk_show_nearest.grid(row=0, column=4, sticky=E)
-        self.lbl_nearest.grid(row=0, column=5, padx=(0,10), sticky=E)
-        self.chk_show_original.grid(row=0, column=6, sticky=E)
-        self.lbl_original.grid(row=0, column=7, padx=(0,100), sticky=E)
+        self.chk_show_nearest.grid(row=0, column=2, sticky=E)
+        self.lbl_nearest.grid(row=0, column=3, padx=(0,10), sticky=E)
+        self.chk_show_original.grid(row=0, column=4, sticky=E)
+        self.lbl_original.grid(row=0, column=5, padx=(0,100), sticky=E)
         
-        self.chk_show_lines.grid(row=0, column=8, sticky=E)
-        self.chk_show_numbers.grid(row=0, column=9, sticky=E)
+        self.chk_show_lines.grid(row=0, column=6, sticky=E)
+        self.chk_show_numbers.grid(row=0, column=7, sticky=E)
 
         self.canvas.grid(row=1,column=0,sticky=N+S+E+W)
         self.sbarv.grid(row=1,column=1,stick=N+S)
@@ -133,7 +128,6 @@ class ExampleApp(Frame):
         self.tk_img = None
         self.trial = None
         self.trial_nearest = None
-        self.trial_adj = None
         self.trial_num = 1
         self.start_x = 0
         self.start_y = 0
@@ -190,15 +184,11 @@ class ExampleApp(Frame):
             archive_data_files = zipObj.namelist()
 
             nearest_path = [i for i in archive_data_files if 'NEAREST' in i][0]
-            golden_path = [i for i in archive_data_files if 'ADJUSTED' in i][0]
 
             with io.TextIOWrapper(zipObj.open(nearest_path), encoding='utf-8') as test:
-                self.trial_nearest = fixations.load_json_trial_from_zip(test.read(), stimulus_name, mapping_name)
-        
-            with io.TextIOWrapper(zipObj.open(golden_path), encoding='utf-8') as test:
                 data = test.read()
+                self.trial_nearest = fixations.load_json_trial_from_zip(data, stimulus_name, mapping_name)
                 self.trial = fixations.load_json_trial_from_zip(data, stimulus_name, mapping_name)
-                self.trial_adj = fixations.load_json_trial_from_zip(data, stimulus_name, mapping_name)
 
             self.trial_num = 1
             self.reload_image()
@@ -206,7 +196,7 @@ class ExampleApp(Frame):
         self.update_fixation_count_label()
     
     def reload_image(self):
-        utils.plot_fixations_for_verification(self.get_image_content_from_support_zip(self.trial.stimulus_image), self.trial.fixations[:(self.trial_num + 2)], self.trial_adj.fixations[:(self.trial_num + 2)], self.trial_nearest.fixations[:(self.trial_num + 2)], self.trial_num - 1, self.check_states, 'temp_fix_image.jpg')
+        utils.plot_fixations_for_verification(self.get_image_content_from_support_zip(self.trial.stimulus_image), self.trial.fixations[:(self.trial_num + 2)], self.trial_nearest.fixations[:(self.trial_num + 2)], self.trial_num - 1, self.check_states, 'temp_fix_image.jpg')
         im = Pil_image.open('temp_fix_image.jpg')
         self.tk_img = Pil_imageTk.PhotoImage(im)
         self.canvas.itemconfig(self.canvas_img, image=self.tk_img)
@@ -246,7 +236,7 @@ class ExampleApp(Frame):
             return
         
         fix_list = self.trial.fixations[:self.trial_num]
-        fix_adjustments = self.trial_adj.fixations[:self.trial_num]
+        fix_adjustments = self.trial_nearest.fixations[:self.trial_num]
         fix_list[-1].adjusted_x = fix_adjustments[-1].adjusted_x
         fix_list[-1].adjusted_y = fix_adjustments[-1].adjusted_y
         self.start_x = 0
@@ -278,15 +268,6 @@ class ExampleApp(Frame):
         if not self.tk_img:
             return
         
-        self.reload_image()
-
-    def toggle_adjusted(self, key_bind=None):
-        if key_bind:
-            self.chk_show_adjusted.toggle()
-        
-        if not self.tk_img:
-            return
-
         self.reload_image()
     
     def toggle_nearest(self, key_bind=None):
