@@ -322,8 +322,8 @@ class Fixation:
         self.srcml_context2 = token_mapping.srcml2
     
     def update_x_y_offsets(self, adj_x, adj_y):
-        self.adjusted_x = adj_x
-        self.adjusted_y = adj_y
+        self.adjusted_x = int(adj_x)
+        self.adjusted_y = int(adj_y)
 
     def calculated_adjusted_x(self):
         return self.fixation_x + self.adjusted_x
