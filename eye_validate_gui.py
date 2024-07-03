@@ -142,7 +142,7 @@ class ExampleApp(Frame):
 
     def finish(self):
 
-        filename_attribute =  '_VALIDATION_' + str(int(datetime.now().timestamp())) 
+        filename_attribute =  'VALIDATION_' + str(int(datetime.now().timestamp())) 
 
         token_stuff = TokenMapper(self.trial.mapping_data_file, self.get_text_content_from_support_zip(self.trial.mapping_data_file))
 
@@ -165,6 +165,27 @@ class ExampleApp(Frame):
         if not self.json_file:
             return
         
+        meta_data = os.path.basename(self.json_file.name)
+        stimulus_name = None
+        mapping_name = None
+        if 'rectangle' in meta_data:
+            stimulus_name = 'rectangle_java'
+            mapping_name = 'rect'
+        elif 'vehicle' in meta_data:
+            stimulus_name = 'vehicle_java'
+            mapping_name = 'vehicle'
+        else:
+           raise Exception("Study filename is invalid!") 
+
+        if 'java2' in meta_data:
+                stimulus_name += '2'
+                mapping_name += '2'
+        
+        stimulus_name += '.jpg'
+        mapping_name += '_complete_mapping.txt'
+        
+            
+        
         with ZipFile(self.json_file.name, 'r') as zipObj:
             archive_data_files = zipObj.namelist()
 
@@ -172,12 +193,12 @@ class ExampleApp(Frame):
             golden_path = [i for i in archive_data_files if 'ADJUSTED' in i][0]
 
             with io.TextIOWrapper(zipObj.open(nearest_path), encoding='utf-8') as test:
-                self.trial_nearest = fixations.load_json_trial_from_zip(test.read())
+                self.trial_nearest = fixations.load_json_trial_from_zip(test.read(), stimulus_name, mapping_name)
         
             with io.TextIOWrapper(zipObj.open(golden_path), encoding='utf-8') as test:
                 data = test.read()
-                self.trial = fixations.load_json_trial_from_zip(data)
-                self.trial_adj = fixations.load_json_trial_from_zip(data)
+                self.trial = fixations.load_json_trial_from_zip(data, stimulus_name, mapping_name)
+                self.trial_adj = fixations.load_json_trial_from_zip(data, stimulus_name, mapping_name)
 
             self.trial_num = 1
             self.reload_image()

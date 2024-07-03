@@ -133,13 +133,28 @@ def merge_classifications(trial, raw_gaze_collection, merge_fixation_time_interv
                 trial.add_fixation(Fixation(trial.trial_participant, fix_x, fix_y, temp_list.copy(), (temp_list[-1].timestamp - temp_list[0].timestamp) / 1000))
 
 
-def load_json_trial_from_zip(json_string):
-    trial = None
+def load_json_trial_from_file(json_file, stimulus_image_name=None, mapping_data_file=None):
+    trial_data = None
+    with open(json_file, 'r') as data:
+        json_obj = json.load(data)
+        trial_data = load_json_trial_data(json_obj, stimulus_image_name, mapping_data_file)
+    return trial_data
+
+def load_json_trial_from_zip(json_string, stimulus_image_name=None, mapping_data_file=None):
     json_obj = json.loads(json_string)
+    return load_json_trial_data(json_obj, stimulus_image_name, mapping_data_file)
+
+def load_json_trial_data(json_obj, stimulus_image_name=None, mapping_data_file=None):
+    trial = None
 
     # Build the trial
-    trial = Trial(json_obj['trial_participant'], json_obj['raw_gaze_data_file'], json_obj['stimulus_image'], json_obj['mapping_data_file'], json_obj['filter_name'], json_obj['filter_settings'])
-        
+    trial = Trial(json_obj['trial_participant'], 
+                  json_obj['raw_gaze_data_file'],
+                  json_obj['stimulus_image'] if not stimulus_image_name else (json_obj['stimulus_image'].replace(os.path.basename(json_obj['stimulus_image']), stimulus_image_name)), 
+                  json_obj['mapping_data_file'] if not mapping_data_file else (json_obj['mapping_data_file'].replace(os.path.basename(json_obj['mapping_data_file']), mapping_data_file)),
+                  json_obj['filter_name'],
+                  json_obj['filter_settings'])
+  
     #create the fixations
     for f in json_obj['fixations']:
         # Get the gazes
@@ -176,7 +191,9 @@ def load_json_trial_from_zip(json_string):
             f['col_num'],
             f['character'],
             f['token'],
-            f['syntactic_context']
+            f['syntactic_context'],
+            f['srcml_context1'] if 'srcml_context1' in f else None,
+            f['srcml_context2'] if 'srcml_context1' in f else None
         )
         
         fix.fixation_id = f['fixation_id']
@@ -278,7 +295,7 @@ class SmoothPursuit:
         
 
 class Fixation:
-    def __init__(self, trial, x, y, raw_gazes, duration, line_num = None, col_num = None, character = None, token = None, syntactic_context = None):
+    def __init__(self, trial, x, y, raw_gazes, duration, line_num = None, col_num = None, character = None, token = None, syntactic_context = None, srcml1 = None, srcml2 = None):
         self.trial = trial
         self.fixation_id = None
         self.fixation_x = x
@@ -291,6 +308,8 @@ class Fixation:
         self.character = character
         self.token = token
         self.syntactic_context = syntactic_context
+        self.srcml_context1 = srcml1
+        self.srcml_context2 = srcml2
         self.raw_gazes = raw_gazes
 
     def update_token_info(self, token_mapping):
@@ -299,6 +318,8 @@ class Fixation:
         self.character = token_mapping.character
         self.token = token_mapping.source_token
         self.syntactic_context = token_mapping.syntactic_context
+        self.srcml_context1 = token_mapping.srcml1
+        self.srcml_context2 = token_mapping.srcml2
     
     def update_x_y_offsets(self, adj_x, adj_y):
         self.adjusted_x = adj_x
@@ -393,9 +414,9 @@ class Trial:
             output.write(self.filter_name + '\n')
             output.write(self.filter_settings + '\n')
             output.write('\n')
-            output.write('FIX_ID\tFIX_X\tFIX_Y\tFIX_X_ADJUST\tFIX_Y_ADJUST\tFIX_DURATION\tFIX_LINE\tFIX_COL\tFIX_CHAR\tFIX_TOKEN\tFIX_SYNTACTIC_CONTEXT\n')
+            output.write('FIX_ID\tFIX_X\tFIX_Y\tFIX_X_ADJUST\tFIX_Y_ADJUST\tFIX_DURATION\tFIX_LINE\tFIX_COL\tFIX_CHAR\tFIX_TOKEN\tFIX_SYNTACTIC_CONTEXT\tFIX_SRCML_GRANULARITY_1\tFIX_SRCML_GRANULARITY_2\n')
             for fix in self.fixations:
-                output.write('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n'.format(
+                output.write('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n'.format(
                     fix.fixation_id,
                     fix.fixation_x,
                     fix.fixation_y,
@@ -406,7 +427,9 @@ class Trial:
                     fix.col_num,
                     fix.character,
                     fix.token,
-                    fix.syntactic_context)
+                    fix.syntactic_context,
+                    fix.srcml_context1,
+                    fix.srcml_context2)
                 )
 
 

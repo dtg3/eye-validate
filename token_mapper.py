@@ -1,7 +1,7 @@
 import math
 
 class Mapping:
-    def __init__(self, line_num, col_num, character, x1, y1, x2, y2, token=None, syntactic_context=None):
+    def __init__(self, line_num, col_num, character, x1, y1, x2, y2, token=None, syntactic_context=None, srcml1=None, srcml2=None):
         self.line_num = int(line_num) if line_num else line_num
         self.col_num = int(col_num) if col_num else col_num
         self.character = character
@@ -11,6 +11,8 @@ class Mapping:
         self.bounding_y2 = int(y2) if y2 else y2
         self.source_token = token
         self.syntactic_context = syntactic_context
+        self.srcml1 = srcml1
+        self.srcml2 = srcml2
 
     def compute_center(self):
         return ( (self.bounding_x1 + self.bounding_x2) / 2, (self.bounding_y1 + self.bounding_y2) / 2 )
@@ -18,7 +20,18 @@ class Mapping:
     def distance_from_bounding_center(self, x, y):
         center_point = self.compute_center()
         return math.sqrt( ((center_point[0] - x) ** 2) + ((center_point[1] - y) ** 2) )
-
+    
+    def __str__(self):
+        return (f"MAPPING_LINE/COL: ({self.line_num}, {self.col_num})\n"
+                f"MAPPING_CHAR: {self.character}\n"
+                f"MAPPING_BOUNDING_X1: {self.bounding_x1}\n"
+                f"MAPPING_BOUNDING_Y1: {self.bounding_y1}\n"
+                f"MAPPING_BOUNDING_X2: {self.bounding_x2}\n"
+                f"MAPPING_BOUNDING_Y2: {self.bounding_y2}\n"
+                f"MAPPING_SOURCE_TOKEN: {self.source_token}\n"
+                f"MAPPING_SYNTACTIC_CONTEXT: {self.syntactic_context}\n"
+                f"MAPPING_SRCML1: {self.srcml1}\n"
+                f"MAPPING_SRCML2: {self.srcml2}")
 
 class TokenMapper:
     def __init__(self, mapping_file_path, mapping_file_context):
@@ -27,7 +40,7 @@ class TokenMapper:
 
     def map_tokens(self, mapping_data):
         map = {}
-        for entry in mapping_data:
+        for entry in mapping_data[1:]:
             stimulus_mapping = Mapping(*(entry.strip().split()))
             if not (stimulus_mapping.bounding_y1, stimulus_mapping.bounding_y2) in map:
                 map[(stimulus_mapping.bounding_y1, stimulus_mapping.bounding_y2)] = []
