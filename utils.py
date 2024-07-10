@@ -122,8 +122,8 @@ def plot_fixations_for_verification(image_path, fixations, neartest_fixations, c
         img2 = cv2.circle(img2, (fix_current_nearest.calculated_adjusted_x(), fix_current_nearest.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
     
     if fix_current:
-        img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius - 1, CURRENT_COLOR, -1)
-        img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius - 1, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
+        img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius, CURRENT_COLOR, -1)
+        img2 = cv2.circle(img2, (fix_current.calculated_adjusted_x(), fix_current.calculated_adjusted_y()), radius, BLACK_COLOR, BLACK_OUTLINE_THICKNESS)
 
     cv2.imwrite(output_file, img2)
 

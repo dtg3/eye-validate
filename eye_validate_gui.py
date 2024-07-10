@@ -1,3 +1,4 @@
+import tkinter.messagebox
 from PIL import Image as Pil_image, ImageTk as Pil_imageTk
 from tkinter import *
 import tkinter.filedialog
@@ -23,7 +24,6 @@ class ExampleApp(Frame):
         Frame.__init__(self,master=None)
         self.master = master
         self.trial = None
-        #self.trial_adj = None
         self.trial_nearest = None
         self.canvas_width, self.canvas_height = self.get_app_dimensions()
         self.canvas = Canvas(self, width=self.canvas_width, height=self.canvas_height, cursor="cross")
@@ -58,13 +58,16 @@ class ExampleApp(Frame):
         self.lbl_nearest = Label(self.frame1, text="  ", bg=from_rgb((0, 212, 255)))
 
         self.fix_count_status = StringVar()
-        self.lbl_fixation_count_status = Label(self.frame2, textvariable = self.fix_count_status)
+        self.lbl_fixation_count_status = Label(self.frame2, textvariable=self.fix_count_status)
 
         self.lbl_instructions = Label(self.frame2, 
                                       text="Click on the image to reposition the green fixation if it appears out of place.",
-                                      font=("Arial", 20))
+                                      font=("Arial", 14))
         
-        self.canvas.focus_set()     
+        self.trial_info = StringVar()
+        self.lbl_trial_info = Label(self.frame1, textvariable=self.trial_info, font=("Arial", 12))
+        
+        self.canvas.focus_set()
 
         self.sbarv=Scrollbar(self,orient=VERTICAL)
         self.sbarh=Scrollbar(self,orient=HORIZONTAL)
@@ -83,10 +86,12 @@ class ExampleApp(Frame):
         self.chk_show_nearest.grid(row=0, column=2, sticky=E)
         self.lbl_nearest.grid(row=0, column=3, padx=(0,10), sticky=E)
         self.chk_show_original.grid(row=0, column=4, sticky=E)
-        self.lbl_original.grid(row=0, column=5, padx=(0,100), sticky=E)
+        self.lbl_original.grid(row=0, column=5, padx=(0,50), sticky=E)
         
         self.chk_show_lines.grid(row=0, column=6, sticky=E)
-        self.chk_show_numbers.grid(row=0, column=7, sticky=E)
+        self.chk_show_numbers.grid(row=0, column=7, padx=(0,100), sticky=E)
+
+        self.lbl_trial_info.grid(row=0, column=8, sticky=E)
 
         self.canvas.grid(row=1,column=0,sticky=N+S+E+W)
         self.sbarv.grid(row=1,column=1,stick=N+S)
@@ -95,7 +100,7 @@ class ExampleApp(Frame):
         self.prev_fix_btn.grid(row=0, column=0, padx=(0,50), sticky=W)
         self.lbl_fixation_count_status.grid(row=0, column=1, padx=(0, 50), sticky=W)
         self.next_fix_btn.grid(row=0, column=2, padx=(0,100), sticky=W)
-        self.lbl_instructions.grid(row=0, column=3, sticky=W)
+        self.lbl_instructions.grid(row=0, column=3, sticky=E)
         
         self.canvas.bind("<ButtonPress-1>", self.on_button_press)
         self.canvas.bind("<ButtonRelease-1>", self.on_button_release)
@@ -169,8 +174,10 @@ class ExampleApp(Frame):
             stimulus_name = 'vehicle_java'
             mapping_name = 'vehicle'
         else:
-           raise Exception("Study filename is invalid!") 
-
+           tkinter.messagebox.showerror("Error", "Study filename is invalid!")
+           self.set_up()
+           return
+           
         if 'java2' in meta_data:
                 stimulus_name += '2'
                 mapping_name += '2'
@@ -178,7 +185,7 @@ class ExampleApp(Frame):
         stimulus_name += '.jpg'
         mapping_name += '_complete_mapping.txt'
         
-            
+        self.trial_info.set('Viewing trial: ' + os.path.basename(self.json_file.name))
         
         with ZipFile(self.json_file.name, 'r') as zipObj:
             archive_data_files = zipObj.namelist()
@@ -286,6 +293,14 @@ class ExampleApp(Frame):
 
             path = [i for i in archive_data_files if ntpath.basename(path) in i][0]
 
+            if "java2_" in self.trial_info.get() and "java2.jpg" not in path:
+                tkinter.messagebox.showerror("Error", "Incorrect stimulus image loaded!")
+                exit()
+
+            if "java_" in self.trial_info.get() and "java.jpg" not in path:
+                tkinter.messagebox.showerror("Error", "Incorrect stimulus image loaded!")
+                exit()
+
             image_data = zipObj.open(path).read()
 
         return image_data
@@ -297,6 +312,14 @@ class ExampleApp(Frame):
             archive_data_files = zipObj.namelist()
 
             path = [i for i in archive_data_files if ntpath.basename(path) in i][0]
+
+            if "java2_" in self.trial_info.get() and "2_" not in path:
+                tkinter.messagebox.showerror("Error", "Incorrect mapping file loaded!")
+                exit()
+
+            if "java_" in self.trial_info.get() and "2_" in path:
+                tkinter.messagebox.showerror("Error", "Incorrect mapping file loaded!")
+                exit()
 
             with io.TextIOWrapper(zipObj.open(path), encoding='utf-8') as text:
                 text_data = text.read().splitlines()
