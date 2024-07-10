@@ -66,9 +66,9 @@ Each of these positions are represented by the color to the immediate right of t
 
 * r = Reset the current fixation to the adjusted position (equivalent to the Reset Fixation button)
 
-* a = Move backwards in the dataset to the previous fixation (equivalent to the Previous Fixation button)
+* a = Move backward in the dataset to the previous fixation (equivalent to the Previous Fixation button)
 
-* d = Move forwars in the dataset to the next fixation (equivalent to the Next Fixation Button).
+* d = Move forward in the dataset to the next fixation (equivalent to the Next Fixation Button).
 
 * 1, 2 = Toggle Nearest and Original data checkboxes respectively
 
