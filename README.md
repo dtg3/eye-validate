@@ -38,13 +38,11 @@ The image below represents the graphical interface of the eye-validate applicati
 
 In addition to representing eye tracking data as described in "Data Representation", the interface allows for additional interactions and data presentation options. Once a zip file containing eye tracking trial data is opened, the interface will display the stimulus and the first set of data in the trial. The previous and next fixation buttons allow for iterating through the dataset and presenting the assciated fixation information. If a current fixation (green dot) does not appear in a location that seems reasonable, clicking on any location in the image stimulus will move the data point to that location and save the changed position data. Sometimes is it helpful to see other possible fixation positions. The checkboxes along the top can supplement the visualization by showing the:
 
-* Adjusted position which is the assumed correct position of the current fixation)
+* Original position which is the initial fixation position without any modifications
 
-* Nearest position, or the closest textual token to the original location calculated by the fixation detection algorithm
+* Nearest position which snaps to the closest character in a textual token (does not consider previous or subsequent fixations)
 
-* Original position which was calculated by the fixation detection algorithm without any modifications
-
-Each of these positions are represented by the color to the immediate right of the respective checkboxes. It is important to note that due to the order in which this data is drawn if a dot does not appear it is most likely that it is covered by one of the other positions. For example, if the nearest and adjusted positions are the same locations, if both check boxes are selected, only the adjusted position will be seen as it is drawn after the nearest position data.
+Each of these positions are represented by the color to the immediate right of the respective checkboxes. It is important to note that due to the order in which this data is drawn if a dot does not appear it is most likely that it is covered by one of the other positions. For example, the nearest (yellow) and current (green) positions are assigned to the same location by default, if the nearest checkbox is enabled only the current position will be seen as it is drawn after (on top of) the nearest position data.
 
 ## Basic Usage Steps
 
@@ -60,6 +58,8 @@ Each of these positions are represented by the color to the immediate right of t
 
 6. Repeat steps 3-5 until the stimulus image disappears. The validation data is automatically written to the same director of the trial data file
 
+7. Upload validation data to Google Drive
+
 ## Keyboard Shortcut Quick Reference
 
 * o = Open a new trial data zip file (equivalent to the Open Fixation Data button)
@@ -70,9 +70,9 @@ Each of these positions are represented by the color to the immediate right of t
 
 * d = Move forwars in the dataset to the next fixation (equivalent to the Next Fixation Button).
 
-* 1, 2, 3 = Toggle the Adjusted, Nearest, and Original data checkboxes respectively
+* 1, 2 = Toggle Nearest and Original data checkboxes respectively
 
-* 4, 5 = Toggle show lines and show numbers checkboxes respectively
+* 3, 4 = Toggle show lines and show numbers checkboxes respectively
 
 * Mousewheel = Scroll the canvas vertically if necessary
 

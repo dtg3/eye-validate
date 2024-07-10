@@ -136,6 +136,7 @@ class ExampleApp(Frame):
         self.trial_num = 1
         self.start_x = 0
         self.start_y = 0
+        self.trial_info.set("")
 
         self.update_fixation_count_label()
 
