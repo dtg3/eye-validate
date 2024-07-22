@@ -98,4 +98,4 @@ Each time you complete a dataset, you will get a `.tsv` and a `.json` file named
 
 * Previous data fixations (dark red dots) **always show the original location determined by the fixation detection algorithm**. This is by design to avoid introducing excessive skewing/bias to the fixation correction process.
 
-* When you correct a green fixation location, that new location is recorded on mouse click and saved automatically in an output file once the next fixation button (or the `d` key) is pressed after viewing the last fixation in the trial and the stimulus image disappears.
+* When you correct a green fixation location, that new location is recorded on mouse click and saved automatically in an output file once the next fixation button (or the `d` key) is pressed after viewing the last fixation in the trial and the stimulus image disappears. **NOTE:** Do your best to click on the character in the token you wish to mark as the fixation location. The bounding boxes can be tight and missing the charater/token will result in no token being paired with a fixation. When in doubt, aim for the "center" of the character.

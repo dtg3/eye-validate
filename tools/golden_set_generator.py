@@ -108,11 +108,15 @@ def get_all_trial_file_paths(root_directory, extensions=None, filters=None):
                 trial_id = int(preprocessed_filename[0]) 
                 stimulus = preprocessed_filename[1] + ('2' if preprocessed_filename[2] == 'java2' else '')
 
-                trial_content[(trial_id, stimulus)] = content_path
+                if (trial_id, stimulus) not in trial_content:
+                    trial_content[(trial_id, stimulus)] = []
+
+                trial_content[(trial_id, stimulus)].append(content_path)
 
     return trial_content
 
 def match_token(line, mapping_set):
+    print(line)
     data = line.strip().split()
 
     for item in mapping_set:
@@ -125,31 +129,35 @@ def match_token(line, mapping_set):
 def main():
 
     mapping_data = get_mapping_from_support_zip(os.path.join('..', 'support_files.zip'))
-    validation_data = get_all_trial_file_paths(os.path.join('..', 'studies'), extensions=['tsv'])
-    trial_data = get_all_trial_file_paths(os.path.join('..', 'data_set'), extensions=['tsv'], filters=['_NEAREST_'])
+    validation_data = get_all_trial_file_paths(os.path.join('..', 'output_validation'), extensions=['tsv'])
 
     os.makedirs(os.path.join('..', 'goldenset'), exist_ok=True)
 
     for key in validation_data:
-        if key in trial_data:
-            print(f"PROCESSING GOLDENSET FROM: {validation_data[key]} <=> {trial_data[key]}")
-            output_filename = os.path.basename(validation_data[key])[:validation_data[key].find("_fixations")] + "GOLDENSET.tsv"
-            fpath = os.path.join('..', 'goldenset', output_filename)
-            with open(fpath, 'w') as output:
-                with open(validation_data[key], 'r') as input_validation1:
-                    with open(trial_data[key], 'r') as input_validation2:
-                        for line_num in range(6):
-                            line_data = input_validation1.readline()
-                            input_validation2.readline()
-                            
-                            if line_num != 1:
-                                output.write(line_data)
+        if len(validation_data[key]) < 2:
+            continue
+        if len(validation_data[key]) > 2:
+            print("Too Many Validation Files!")
+            exit(1)
+        
+        print(f"PROCESSING GOLDENSET FROM: {validation_data[key][0]} <=> {validation_data[key][1]}")
+        output_filename = os.path.basename(validation_data[key][0])[:validation_data[key][0].find("_fixations")] + "GOLDENSET.tsv"
+        fpath = os.path.join('..', 'goldenset', output_filename)
+        with open(fpath, 'w') as output:
+            with open(validation_data[key][0], 'r') as input_validation1:
+                with open(validation_data[key][1], 'r') as input_validation2:
+                    for line_num in range(6):
+                        line_data = input_validation1.readline()
+                        input_validation2.readline()
                         
-                        mapping_set = mapping_data[key[1]]
+                        if line_num != 1:
+                            output.write(line_data)
+                    
+                    mapping_set = mapping_data[key[1]]
 
-                        for line in input_validation1:
-                            if match_token(line, mapping_set) == match_token(input_validation2.readline(), mapping_set):
-                                output.write(line)
+                    for line in input_validation1:
+                        if match_token(line, mapping_set) == match_token(input_validation2.readline(), mapping_set):
+                            output.write(line)
 
 if __name__ == "__main__":
     main()
