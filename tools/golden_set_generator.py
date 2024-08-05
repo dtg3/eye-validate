@@ -1,5 +1,6 @@
 import os
 import io
+import random
 from zipfile import ZipFile
 
 
@@ -116,15 +117,15 @@ def get_all_trial_file_paths(root_directory, extensions=None, filters=None):
     return trial_content
 
 def match_token(line, mapping_set):
-    print(line)
+    #print(line)
     data = line.strip().split()
 
     for item in mapping_set:
-        if int(data[6]) == item.line_number and item.col_range[0] <= int(data[7]) <= item.col_range[1]:
+        if data[6] != "None" and data[7] != "None" and int(data[6]) == item.line_number and item.col_range[0] <= int(data[7]) <= item.col_range[1]:
             return item
         
     print("DIDN'T FIND A MAPPING!")
-    exit(1)
+    return None
 
 def main():
 
@@ -136,12 +137,13 @@ def main():
     for key in validation_data:
         if len(validation_data[key]) < 2:
             continue
-        if len(validation_data[key]) > 2:
-            print("Too Many Validation Files!")
-            exit(1)
+        while len(validation_data[key]) > 2:
+            print(f"Too Many Validation Files ({len(validation_data[key])})!")
+            print(f"Removing: {validation_data[key].pop(random.randrange(len(validation_data[key])))}")
         
         print(f"PROCESSING GOLDENSET FROM: {validation_data[key][0]} <=> {validation_data[key][1]}")
-        output_filename = os.path.basename(validation_data[key][0])[:validation_data[key][0].find("_fixations")] + "GOLDENSET.tsv"
+        output_filename = os.path.basename(validation_data[key][0])
+        output_filename = output_filename[:output_filename.find("fixations")] + "GOLDENSET.tsv"
         fpath = os.path.join('..', 'goldenset', output_filename)
         with open(fpath, 'w') as output:
             with open(validation_data[key][0], 'r') as input_validation1:
@@ -156,7 +158,9 @@ def main():
                     mapping_set = mapping_data[key[1]]
 
                     for line in input_validation1:
-                        if match_token(line, mapping_set) == match_token(input_validation2.readline(), mapping_set):
+                        v1 = match_token(line, mapping_set)
+                        v2 = match_token(input_validation2.readline(), mapping_set)
+                        if v1 and v2 and v1 == v2:
                             output.write(line)
 
 if __name__ == "__main__":
