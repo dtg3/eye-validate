@@ -92,6 +92,8 @@ Each time you complete a dataset, you will get a `.tsv` and a `.json` file named
 
 * You **must** launch the gui application from it's root directory. Using an absolute or relative path that launches the application from another working directory will cause the application to not be able to locate important supporting files.
 
+* Do not resize the application using the standard window controls. If you'd like the application window to be larger, please use the configuration file mentioned in the instructions above. Resizing the window could alter the offsets recorded by the tool.
+
 * The `.tsv` and `.json` files produced during the validation are saved to the same directory where you loaded the trial data zip file and cannot be changed at this time through the interface.
 
 * The adjusted data fixation points (green dots) and the saccade lines that connect to it (green lines) are drawn on top of all other lines and dots to increase visibility. It is possible that these data points may obscure other visualized data.
